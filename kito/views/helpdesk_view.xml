@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="view_helpdek_tree_kito" model="ir.ui.view">
+            <field name="name">helpdesk.ticket.tree.kito</field>
+            <field name="model">helpdesk.ticket</field>
+            <field name="inherit_id" ref="helpdesk.helpdesk_tickets_view_tree"/>
+            <field name="arch" type="xml">
+            	<field name="partner_id" position="after">
+                    <field name="ref" optional="hide"/>
+            		<field name="sap_ref" optional="hide"/>
+            	</field>
+            </field>
+        </record>
+
+        <record id="view_helpdek_form_kito" model="ir.ui.view">
+            <field name="name">helpdesk.ticket.form.kito</field>
+            <field name="model">helpdesk.ticket</field>
+            <field name="inherit_id" ref="helpdesk.helpdesk_ticket_view_form"/>
+            <field name="arch" type="xml">
+                <field name="email_cc" position="after">
+                    <field name="ref"/>
+                    <field name="sap_ref"/>
+                </field>
+                <xpath expr="//div[@name='button_box']" position=
+                    "inside">
+                    <button name="action_view_lead" class="oe_stat_button" icon="fa-star" type="object" attrs="{'invisible':  [('lead_count', '=', 0)]}">
+                    <field name="lead_count" widget="statinfo" string="Leads"/>
+                    </button>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_helpdek_search_kito" model="ir.ui.view">
+            <field name="name">helpdesk.ticket.search.kito</field>
+            <field name="model">helpdesk.ticket</field>
+            <field name="inherit_id" ref="helpdesk.helpdesk_tickets_view_search"/>
+            <field name="arch" type="xml">
+                <field name="id" position="before">
+                    <field name="sequence" string="Ticket ID"/>
+                </field>
+                <field name="id" position="attributes">
+                    <attribute name="string">DB Ticket ID</attribute>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_helpdek_kanban_kito" model="ir.ui.view">
+            <field name="name">helpdesk.ticket.kanban.kito</field>
+            <field name="model">helpdesk.ticket</field>
+            <field name="inherit_id" ref="helpdesk.helpdesk_ticket_view_kanban"/>
+            <field name="arch" type="xml">
+                <xpath expr="//templates/t/div/div[2]/div[2]" position="replace">
+                    <div>
+                    <strong><field name="name"/> (#<field name="sequence"/>)</strong>
+                </div>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Change Ticket ID to Sequence in Portal view -->
+        <template id="portal_helpdesk_tickets_custom" inherit_id="helpdesk.portal_helpdesk_ticket" priority="99">
+            <xpath expr="//t[@t-else='']/t/t/t/tr/td" position="replace">
+                <td class="text-right"><a t-attf-href="/helpdesk/ticket/#{ticket.id}"><small>#</small><t t-esc="ticket.sequence"/></a></td>
+            </xpath>
+        </template>
+
+        <template id="portal_my_home_menu_helpdesk_custom"
+            inherit_id="helpdesk.portal_my_home_menu_helpdesk" priority="99">
+              <xpath expr="//li[@t-if='ticket']" position="replace">
+                <li t-if="ticket" class="breadcrumb-item active">
+                #<span t-field="ticket.sequence"/>
+            </li>
+            </xpath>
+        </template>
+
+        <template id="tickets_followup_custom" inherit_id="helpdesk.tickets_followup" priority="99">
+            <xpath expr="//t/t[3]/t/div/div/h5/div/small" position="replace">
+                <small class="text-muted"> (#<span t-field="ticket.sequence"/>)</small>
+            </xpath>
+        </template>
+    </data>
+</odoo>

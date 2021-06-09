@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<record id="view_partner_bank_form_inherit_kito" model="ir.ui.view">
+        <field name="name">res.partner.bank.form.inherit.kito</field>
+        <field name="model">res.partner.bank</field>
+        <field name="inherit_id" ref="base.view_partner_bank_form"/>
+        <field name="priority">16</field>
+        <field name="arch" type="xml">
+        	<field name="acc_number" position="after">
+        		<field name="template_bin"/>
+        		<field name="template_account_number"/>
+        		<field name="template_iban"/>
+        	</field>
+        </field>
+    </record>
+</odoo>

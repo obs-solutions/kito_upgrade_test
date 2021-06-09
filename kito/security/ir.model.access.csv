@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+
+access_partner_region,access_partner_region,model_res_partner_region,,1,1,1,1
+access_bp_group,access_partner_bp_group,model_res_partner_bp,,1,1,1,1
+access_helpdesk_ticket_merge,access_helpdesk_ticket_merge,model_helpdesk_ticket_merge,base.group_user,1,1,1,1

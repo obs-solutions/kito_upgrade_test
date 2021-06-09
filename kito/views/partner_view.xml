@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <record id="view_partner_relationship_form_kito" model="ir.ui.view">
+            <field name="name">res.partner.relation.form.kito</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" 
+                ref="website_crm_partner_assign.view_crm_partner_assign_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='grade_id']" position="replace">
+                    <field name="grade_id" options="{'no_create': True, 'no_create_edit': True}" string="Relationship"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_partner_sms_form_inherit_kito" model="ir.ui.view">
+            <field name="name">res.partner.sms.form.kito</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="sms.res_partner_view_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='phone']" position="attributes">
+                    <attribute name="options"></attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_res_partner_form_kito" model="ir.ui.view">
+            <field name="name">res.partner.form.kito</field>
+            <field name="model">res.partner</field>
+            <field name="priority">1</field>
+            <field name="inherit_id" ref="base.view_partner_form" />
+            <field name="arch" type="xml">
+
+                <xpath expr="//field[@name='phone']" position="after">
+                   <field name="fax" widget="phone"/>
+                </xpath>
+
+<!--             	<xpath expr="//page[@name='sales_purchases']//field[@name='user_id']" 
+                    position="attributes">
+                   <attribute name="string">CS Salesperson</attribute>
+                </xpath>
+ -->
+                <xpath expr="//page[@name='sales_purchases']//field[@name='user_id']" 
+                    position="before">
+                    <field name="area_sales_manager"
+                        options="{'no_create': True, 'no_create_edit': True}"
+                        attrs="{'invisible':[('company_type','!=','company')]}"/>
+                </xpath>
+
+                <xpath expr="//field[@name='category_id']" position="after">
+                    <field name="is_competitor" 
+                        attrs="{'invisible':[('company_type','!=','company')]}"/>
+                </xpath>
+
+                <xpath expr="//field[@name='vat']" position="after">
+                    <field name="region_id" 
+                        options="{'no_create': True, 'no_create_edit': True}"
+                        attrs="{'invisible':[('company_type','!=','company')]}"/>
+                    <field name="bp_group" 
+                        attrs="{'invisible':[('company_type','!=','company')]}"
+                        options="{'no_create': True, 'no_create_edit': True}"/> 
+                </xpath>
+
+                <xpath expr="//field[@name='ref']" position="replace">
+                    <field name="ref" string="Reference"
+                        attrs="{'invisible':[('company_type','!=','company')]}"/>
+                </xpath>
+
+            </field>
+        </record>
+
+        <record id="view_res_partner_tree_kito" model="ir.ui.view">
+            <field name="name">res.partner.tree.kito</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_tree" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='country_id']" position="after">
+                    <field name="region_id" optional="hide"/>
+                    <field name="industry_id" optional="hide"/>
+                    <field name="area_sales_manager" optional="hide"/>
+                </xpath>
+                <xpath expr="//field[@name='phone']" position="before">
+                    <field name="ref" optional="hide"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_partner_search_kito" model="ir.ui.view">
+            <field name="name">res.partner.search.kito</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_res_partner_filter" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='category_id']" position="after">
+                    <field name="fax"/>
+                    <field name="ref"/>
+                    <field name="region_id"/>
+                    <field name="bp_group"/>
+                    <field name="area_sales_manager"/>
+                    <field name='industry_id' />
+                </xpath>
+                <xpath expr="//filter[@name='group_country']" position="after">
+                    <filter string="Region" name="region_id" context="{'group_by':'region_id'}"/>
+                    <filter string="Industry" name="industry" 
+                        context="{'group_by':'industry_id'}"/>
+
+                    <filter string="Area Sales Manager" name="area_sales_manager" 
+                        context="{'group_by':'area_sales_manager'}"/>
+                    
+
+                    <filter string="Is Competitor" name="is_competitor" context="{'group_by':'is_competitor'}"/>
+                    <filter string="BP Group" name="bp_group" context="{'group_by':'bp_group'}"/>
+                    
+                </xpath>
+            </field>
+        </record>
+
+
+        <record id="action_partner_region" model="ir.actions.act_window">
+            <field name="name">Region</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.partner.region</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
+        
+        <menuitem action="action_partner_region" id="menu_res_partner_region" 
+            parent="contacts.res_partner_menu_config" 
+            groups="sales_team.group_sale_manager" sequence="3"/>
+
+        <record id="action_partner_relationship" model="ir.actions.act_window">
+            <field name="name">Relationship</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.partner.grade</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
+        
+        <menuitem action="action_partner_relationship" id="menu_res_partner_relationship" 
+            parent="contacts.res_partner_menu_config" 
+            groups="sales_team.group_sale_manager" sequence="3"/>
+
+
+        <record id="action_partner_bp_group" model="ir.actions.act_window">
+            <field name="name">BP Group</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.partner.bp</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
+        
+        <menuitem action="action_partner_bp_group" id="menu_res_partner_bp_group" 
+            parent="contacts.res_partner_menu_config" 
+            groups="sales_team.group_sale_manager" sequence="4"/>
+
+    </data>
+</odoo>
