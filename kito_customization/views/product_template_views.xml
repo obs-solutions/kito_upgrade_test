@@ -11,6 +11,7 @@
                 <xpath expr="//field[@name='uom_po_id']" position="after">
                     <field name="warning_qty" attrs="{'invisible': [('product_variant_count', '>', 1)]}"/>
                     <field name="predecessor_id" options="{'no_create': True}" invisible="1"/>
+                    <field name="successor_id" options="{'no_create': True}" invisible="1"/>
                 </xpath>
 
             </field>

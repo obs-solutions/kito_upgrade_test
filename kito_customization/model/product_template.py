@@ -10,6 +10,13 @@ class ProductTemplate(models.Model):
     warning_qty = fields.Float('Warning Qty', compute='_compute_warning_qty',
                                inverse='_set_warning_qty', store=True, copy=True)
     predecessor_id = fields.Many2one('product.template', string='Predecessor', copy=True)
+    successor_id = fields.Many2one('product.template', string='Successor', copy=True)
+
+    @api.constrains('successor_id')
+    def _check_successor_recursion(self):
+        if not self._check_recursion('successor_id'):
+            raise ValidationError(_('You cannot create recursive Successor.'))
+        return True
 
     @api.constrains('predecessor_id')
     def _check_predecessor_recursion(self):
