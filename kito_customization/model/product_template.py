@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from odoo import api, fields, models
+from odoo import api, fields, models, _
+from odoo.exceptions import ValidationError
 
 
 class ProductTemplate(models.Model):
@@ -8,6 +9,13 @@ class ProductTemplate(models.Model):
 
     warning_qty = fields.Float('Warning Qty', compute='_compute_warning_qty',
                                inverse='_set_warning_qty', store=True, copy=True)
+    predecessor_id = fields.Many2one('product.template', string='Predecessor', copy=True)
+
+    @api.constrains('predecessor_id')
+    def _check_predecessor_recursion(self):
+        if not self._check_recursion('predecessor_id'):
+            raise ValidationError(_('You cannot create recursive Predecessor.'))
+        return True
 
     @api.depends('product_variant_ids', 'product_variant_ids.warning_qty')
     def _compute_warning_qty(self):
