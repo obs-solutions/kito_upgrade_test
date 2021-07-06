@@ -10,18 +10,6 @@ class ProductTemplate(models.Model):
     warning_qty = fields.Float('Warning Qty', compute='_compute_warning_qty',
                                inverse='_set_warning_qty', store=True, copy=True)
 
-    @api.constrains('successor_id')
-    def _check_successor_recursion(self):
-        if not self._check_recursion('successor_id'):
-            raise ValidationError(_('You cannot create recursive Successor.'))
-        return True
-
-    @api.constrains('predecessor_id')
-    def _check_predecessor_recursion(self):
-        if not self._check_recursion('predecessor_id'):
-            raise ValidationError(_('You cannot create recursive Predecessor.'))
-        return True
-
     @api.depends('product_variant_ids', 'product_variant_ids.warning_qty')
     def _compute_warning_qty(self):
         unique_variants = self.filtered(lambda template: len(template.product_variant_ids) == 1)
