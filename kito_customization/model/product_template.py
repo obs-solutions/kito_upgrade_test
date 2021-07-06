@@ -9,6 +9,14 @@ class ProductTemplate(models.Model):
 
     warning_qty = fields.Float('Warning Qty', compute='_compute_warning_qty',
                                inverse='_set_warning_qty', store=True, copy=True)
+
+    lifting_capacity_gt = fields.Char(string='Lifting Capacity GT', copy=True)
+    category_gt = fields.Char(string='Category GT', copy=True)
+    lifting_height = fields.Float(string='Lifting Height', copy=True)
+    legnth_of_headchain = fields.Float(string='Length Of Headchain', copy=True)
+    legnth_of_control_cable = fields.Float(string='Length Of Control Cable', copy=True)
+    color = fields.Char(string='Painting/Color/Surface', copy=True)
+    push_button_switch = fields.Selection([('yes', 'Yes'), ('no', 'No')], string='Push Button Switch', copy=True)
     predecessor_id = fields.Many2one('product.template', string='Predecessor', copy=True)
     successor_id = fields.Many2one('product.template', string='Successor', copy=True)
 
