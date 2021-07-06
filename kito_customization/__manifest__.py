@@ -14,7 +14,7 @@
     # Dependency
     'depends': ['sale_management', 'purchase', 'stock', 'repair', 'website_crm_partner_assign'],
     'data': [
-        'views/product_template_views.xml',
+        # 'views/product_template_views.xml',
         'views/sale_order_views.xml',
         'views/res_partner_views.xml',
         'views/purchase_oder_views.xml',
